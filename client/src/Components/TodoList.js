@@ -4,9 +4,11 @@ import Todo from './Todo';
 
 function TodoList() {
   let d = localStorage.getItem('data');
-  if(d==undefined || d==null) 
-    localStorage.setItem('data',[]);
-
+  if(d==undefined || d==null) {
+    d = [];
+    localStorage.setItem('data',JSON.stringify([]));
+  }
+  
   const [todos, setTodos] = useState([]);
 
   useEffect(() => {
@@ -15,7 +17,7 @@ function TodoList() {
       setTodos(items);
     }
   }, []);
-
+  
   const addTodo = todo => {
     if (!todo.text || /^\s*$/.test(todo.text)) {
       return;
@@ -26,17 +28,29 @@ function TodoList() {
     console.log(...todos);
   };
 
-  const updateTodo = (todoId, newValue) => {
-    if (!newValue.text || /^\s*$/.test(newValue.text)) {
-      return;
-    }
+  // const updateTodo = (todoId, newValue) => {
+  //   console.log(todoId, newValue)
+  //   if (!newValue.text || /^\s*$/.test(newValue.text)) {
+  //     return;
+  //   }
 
-    setTodos(prev => prev.map(item => (item.id === todoId ? newValue : item)));
-  };
+  //   setTodos(prev => prev.map(item => (item.id === todoId ? newValue : item)));
+  // };
+
+  const editTodo = (id, val) => {
+    let editedTodos = todos.map(todo => {
+      if(todo.id === id) {
+        todo.text = val.text
+      }
+      return todo;
+    });
+    localStorage.setItem('data', JSON.stringify(editedTodos));
+    setTodos(editedTodos);
+  }
 
   const removeTodo = id => {
     const removedArr = [...todos].filter(todo => todo.id !== id);
-
+    localStorage.setItem('data', JSON.stringify(removedArr));
     setTodos(removedArr);
   };
 
@@ -47,6 +61,7 @@ function TodoList() {
       }
       return todo;
     });
+    localStorage.setItem('data', JSON.stringify(updatedTodos));
     setTodos(updatedTodos);
   };
 
@@ -58,7 +73,8 @@ function TodoList() {
         todos={todos}
         completeTodo={completeTodo}
         removeTodo={removeTodo}
-        updateTodo={updateTodo}
+        // updateTodo={updateTodo}
+        editTodo={editTodo}
       />
     </>
   );
