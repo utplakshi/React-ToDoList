@@ -106,8 +106,16 @@ h1 {
   );
   color: #fff;
   text-transform: capitalize;
+  transition: 0s background-color;
 }
-
+.todo-button:hover{
+  background: linear-gradient(
+    90deg,
+    rgb(96, 31, 228) 0%,
+    rgb(136, 43, 194) 100%
+  );
+  transition-delay:1s;
+}
 .todo-input.edit {
   border: 2px solid #149fff;
 }
